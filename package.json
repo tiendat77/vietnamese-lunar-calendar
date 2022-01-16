@@ -2,7 +2,11 @@
   "name": "vietnamese-lunar-calendar",
   "version": "0.0.1",
   "description": "vietnamese lunar calenar converter",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --exec ts-node ./src/index.ts",
