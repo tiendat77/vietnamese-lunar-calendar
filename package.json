@@ -1,0 +1,26 @@
+{
+  "name": "vietnamese-lunar-calendar",
+  "version": "0.0.1",
+  "description": "vietnamese lunar calenar converter",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node ./src/index.ts",
+    "start": "nodemon ./build/index.js",
+    "prod": "npm run build && npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiendat77/vietnamese-lunar-calendar.git"
+  },
+  "author": "Ji Woo",
+  "license": "ISC",
+  "homepage": "https://github.com/tiendat77/vietnamese-lunar-calendar#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {}
+}
