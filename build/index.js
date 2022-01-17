@@ -10,7 +10,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./calendar"), exports);
+const model_1 = require("./model");
 __exportStar(require("./constant"), exports);
 __exportStar(require("./model"), exports);
 __exportStar(require("solar-lunar"), exports);
+exports.default = {
+    Calendar: model_1.Calendar,
+    LunarDate: model_1.LunarDate,
+    SolarDate: model_1.SolarDate,
+};

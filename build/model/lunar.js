@@ -4,17 +4,41 @@ exports.LunarDate = void 0;
 const constant_1 = require("../constant");
 const solar_lunar_1 = require("../solar-lunar");
 class LunarDate {
-    constructor(year, month, date, isLeap, julian) {
-        this.year = year;
-        this.month = month;
-        this.date = date;
-        this.isLeap = isLeap;
-        this.julian = julian;
-        this.lunarYear = this.getLunarYear(year);
-        this.lunarMonth = this.getLunarMonth(year, month);
-        this.lunarDate = this.getLunarDate(julian);
-        this.lunarHour = this.getLunarHour(julian);
-        this.isVegetarianDay = this.checkVegetarianDay(date);
+    constructor(...args) {
+        let solarDate;
+        let solarMonth;
+        let solarYear;
+        if (args.length === 3) {
+            // year month date constructor
+            solarYear = args[0];
+            solarMonth = args[1];
+            solarDate = args[2];
+        }
+        else if (args.length === 1) {
+            // js Date constructor
+            const date = args[0];
+            solarYear = date.getFullYear();
+            solarMonth = date.getMonth() + 1;
+            solarDate = date.getDate();
+        }
+        else {
+            // empty constructor
+            const date = new Date();
+            solarYear = date.getFullYear();
+            solarMonth = date.getMonth() + 1;
+            solarDate = date.getDate();
+        }
+        const lunar = (0, solar_lunar_1.convertSolar2Lunar)(solarDate, solarMonth, solarYear);
+        this.year = lunar.year;
+        this.month = lunar.month;
+        this.date = lunar.date;
+        this.julian = lunar.julian;
+        this.isLeap = lunar.isLeap;
+        this.isVegetarianDay = this._checkVegetarianDay(lunar.date);
+        this.lunarYear = this._getLunarYear(lunar.year);
+        this.lunarMonth = this._getLunarMonth(lunar.year, lunar.month);
+        this.lunarDate = this._getLunarDate(lunar.julian);
+        this.lunarHour = this._getLunarHour(lunar.julian);
     }
     get holiday() {
         var _a;
@@ -37,6 +61,24 @@ class LunarDate {
         const sunLong = (0, solar_lunar_1.sunLongitude)(this.julian + 0.5 - (0, solar_lunar_1.getLocalTimezone)() / 24) / Math.PI * 12;
         return constant_1.SOLAR_TERM[Math.floor(sunLong)];
     }
+    getYear() {
+        return this.year;
+    }
+    getMonth() {
+        return this.month;
+    }
+    getDate() {
+        return this.date;
+    }
+    getLunarYear() {
+        return this.lunarYear.can + ' ' + this.lunarYear.chi;
+    }
+    getLunarMonth() {
+        return this.lunarMonth.can + ' ' + this.lunarMonth.chi;
+    }
+    getLunarDate() {
+        return this.lunarDate.can + ' ' + this.lunarDate.chi;
+    }
     toString() {
         const day = `${this.date} (${this.lunarDate.can} ${this.lunarDate.chi})`;
         const month = `${this.month} (${this.lunarMonth.can} ${this.lunarMonth.chi})`;
@@ -51,31 +93,31 @@ class LunarDate {
             `${this.holiday ? this.holiday + '\n' : ''}` +
             `${this.isVegetarianDay ? 'Vegetarian Day\n' : ''}`;
     }
-    getLunarYear(year) {
+    _getLunarYear(year) {
         return {
             can: constant_1.HEAVENLY_STEM[(year + 6) % 10],
             chi: constant_1.EARTHLY_BRANCH[(year + 8) % 12],
         };
     }
-    getLunarMonth(year, month) {
+    _getLunarMonth(year, month) {
         return {
             can: constant_1.HEAVENLY_STEM[(year * 12 + month + 3) % 10],
             chi: constant_1.EARTHLY_BRANCH[(month + 1) % 12],
         };
     }
-    getLunarDate(jd) {
+    _getLunarDate(jd) {
         return {
             can: constant_1.HEAVENLY_STEM[(jd + 9) % 10],
             chi: constant_1.EARTHLY_BRANCH[(jd + 1) % 12],
         };
     }
-    getLunarHour(jd) {
+    _getLunarHour(jd) {
         return {
             can: constant_1.HEAVENLY_STEM[(jd - 1) * 2 % 10],
             chi: constant_1.EARTHLY_BRANCH[0]
         };
     }
-    checkVegetarianDay(day) {
+    _checkVegetarianDay(day) {
         return constant_1.VEGETARIAN_DAY.indexOf(day) !== -1;
     }
 }
