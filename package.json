@@ -1,15 +1,13 @@
 {
   "name": "vietnamese-lunar-calendar",
-  "version": "0.0.1",
-  "description": "vietnamese lunar calenar converter",
+  "version": "0.0.2",
+  "description": "vietnamese lunar calendar converter",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --exec ts-node ./src/index.ts",
+    "dev": "nodemon --exec ts-node ./src/test.ts",
     "start": "nodemon ./build/index.js",
     "prod": "npm run build && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
