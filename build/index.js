@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./model"), exports);
 __exportStar(require("./constant"), exports);
-__exportStar(require("./solar-lunar"), exports);
+// export * from './solar-lunar';
 // export default {
 //   Calendar,
 //   LunarDate,
