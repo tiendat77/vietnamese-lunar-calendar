@@ -4,7 +4,9 @@
   "description": "vietnamese lunar calendar converter",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --exec ts-node ./src/test.ts",

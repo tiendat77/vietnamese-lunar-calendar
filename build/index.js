@@ -13,7 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const model_1 = require("./model");
 __exportStar(require("./constant"), exports);
 __exportStar(require("./model"), exports);
-__exportStar(require("solar-lunar"), exports);
 exports.default = {
     Calendar: model_1.Calendar,
     LunarDate: model_1.LunarDate,
