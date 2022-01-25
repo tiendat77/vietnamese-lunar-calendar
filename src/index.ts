@@ -3,7 +3,7 @@ import { VEGETARIAN_DAY, WEEKDAY } from './constant';
 
 export * from './model';
 export * from './constant';
-export * from './solar-lunar';
+// export * from './solar-lunar';
 
 // export default {
 //   Calendar,
