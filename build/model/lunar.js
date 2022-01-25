@@ -1,8 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LunarDate = void 0;
+exports.LunarDate = exports.Lunar = void 0;
 const constant_1 = require("../constant");
 const solar_lunar_1 = require("../solar-lunar");
+class Lunar {
+    constructor(can, chi) {
+        this.can = can;
+        this.chi = chi;
+    }
+    toString() {
+        return this.can + ' ' + this.chi;
+    }
+}
+exports.Lunar = Lunar;
 class LunarDate {
     constructor(...args) {
         let solarDate;
@@ -39,27 +49,9 @@ class LunarDate {
         this.lunarMonth = this._getLunarMonth(lunar.year, lunar.month);
         this.lunarDate = this._getLunarDate(lunar.julian);
         this.lunarHour = this._getLunarHour(lunar.julian);
-    }
-    get holiday() {
-        var _a;
-        return ((_a = constant_1.NATIONAL_HOLIDAYS.find(d => d.day === this.date &&
-            d.month === this.month)) === null || _a === void 0 ? void 0 : _a.info) || null;
-    }
-    get luckyHours() {
-        const chi = (this.julian + 1) % 12;
-        const hours = constant_1.LUCKY_HOURS[chi % 6]; // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
-        const luckyHours = [];
-        for (let i = 0; i < 12; i++) {
-            if (hours.charAt(i) !== '1') {
-                continue;
-            }
-            luckyHours.push(`${constant_1.EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`);
-        }
-        return luckyHours;
-    }
-    get solarTerm() {
-        const sunLong = (0, solar_lunar_1.sunLongitude)(this.julian + 0.5 - (0, solar_lunar_1.getLocalTimezone)() / 24) / Math.PI * 12;
-        return constant_1.SOLAR_TERM[Math.floor(sunLong)];
+        this.holiday = this._getHoliday(lunar.month, lunar.date);
+        this.luckyHours = this._getLuckyHours(lunar.julian);
+        this.solarTerm = this._getSolarTerm(lunar.julian);
     }
     getYear() {
         return this.year;
@@ -89,33 +81,52 @@ class LunarDate {
             `Day: ${day}\n` +
             `Hour: ${hour}\n` +
             `Solar term: ${this.solarTerm}\n` +
-            `Lucky hours: ${this.luckyHours.join(', ')}\n` +
+            `Lucky hours: ${this.luckyHours}\n` +
             `${this.holiday ? this.holiday + '\n' : ''}` +
             `${this.isVegetarianDay ? 'Vegetarian Day\n' : ''}`;
     }
     _getLunarYear(year) {
-        return {
-            can: constant_1.HEAVENLY_STEM[(year + 6) % 10],
-            chi: constant_1.EARTHLY_BRANCH[(year + 8) % 12],
-        };
+        const can = constant_1.HEAVENLY_STEM[(year + 6) % 10];
+        const chi = constant_1.EARTHLY_BRANCH[(year + 8) % 12];
+        return new Lunar(can, chi);
     }
     _getLunarMonth(year, month) {
-        return {
-            can: constant_1.HEAVENLY_STEM[(year * 12 + month + 3) % 10],
-            chi: constant_1.EARTHLY_BRANCH[(month + 1) % 12],
-        };
+        const can = constant_1.HEAVENLY_STEM[(year * 12 + month + 3) % 10];
+        const chi = constant_1.EARTHLY_BRANCH[(month + 1) % 12];
+        return new Lunar(can, chi);
     }
     _getLunarDate(jd) {
-        return {
-            can: constant_1.HEAVENLY_STEM[(jd + 9) % 10],
-            chi: constant_1.EARTHLY_BRANCH[(jd + 1) % 12],
-        };
+        const can = constant_1.HEAVENLY_STEM[(jd + 9) % 10];
+        const chi = constant_1.EARTHLY_BRANCH[(jd + 1) % 12];
+        return new Lunar(can, chi);
     }
     _getLunarHour(jd) {
-        return {
-            can: constant_1.HEAVENLY_STEM[(jd - 1) * 2 % 10],
-            chi: constant_1.EARTHLY_BRANCH[0]
-        };
+        const can = constant_1.HEAVENLY_STEM[(jd - 1) * 2 % 10];
+        const chi = constant_1.EARTHLY_BRANCH[0];
+        return new Lunar(can, chi);
+    }
+    _getHoliday(month, date) {
+        var _a;
+        return ((_a = constant_1.NATIONAL_HOLIDAYS.find(d => d.day === date &&
+            d.month === month)) === null || _a === void 0 ? void 0 : _a.info) || null;
+    }
+    _getLuckyHours(julian) {
+        const chi = (julian + 1) % 12;
+        const hours = constant_1.LUCKY_HOURS[chi % 6]; // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+        const luckyHours = [];
+        for (let i = 0; i < 12; i++) {
+            if (hours.charAt(i) !== '1') {
+                continue;
+            }
+            luckyHours.push(
+            // `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`
+            `${constant_1.EARTHLY_BRANCH[i]}`);
+        }
+        return luckyHours.join(', ');
+    }
+    _getSolarTerm(julian) {
+        const sunLong = (0, solar_lunar_1.sunLongitude)(julian + 0.5 - (0, solar_lunar_1.getLocalTimezone)() / 24) / Math.PI * 12;
+        return constant_1.SOLAR_TERM[Math.floor(sunLong)];
     }
     _checkVegetarianDay(day) {
         return constant_1.VEGETARIAN_DAY.indexOf(day) !== -1;

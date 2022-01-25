@@ -13,9 +13,16 @@ import {
   convertSolar2Lunar
 } from '../solar-lunar';
 
-export interface Lunar {
-  can: string;
-  chi: string;
+export class Lunar {
+
+  constructor(
+    public can: string,
+    public chi: string
+  ) { }
+
+  toString(): string {
+    return this.can + ' ' + this.chi;
+  }
 }
 
 export class LunarDate {
@@ -32,36 +39,11 @@ export class LunarDate {
   isLeap: boolean;
   isVegetarianDay: boolean;
 
+  holiday: string | null;
+  luckyHours: string | null;
+  solarTerm: string | null;
+
   private julian: number
-
-  get holiday(): string | null {
-    return NATIONAL_HOLIDAYS.find(d =>
-      d.day === this.date &&
-      d.month === this.month
-    )?.info || null;
-  }
-
-  get luckyHours() {
-    const chi = (this.julian + 1) % 12;
-    const hours = LUCKY_HOURS[chi % 6];  // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
-
-    const luckyHours: string[] = [];
-    for (let i = 0; i < 12; i++) {
-      if (hours.charAt(i) !== '1') {
-        continue;
-      }
-      luckyHours.push(
-        `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`
-      );
-    }
-
-    return luckyHours;
-  }
-
-  get solarTerm() {
-    const sunLong = sunLongitude(this.julian + 0.5 - getLocalTimezone() / 24) / Math.PI * 12;
-    return SOLAR_TERM[Math.floor(sunLong)];
-  }
 
   constructor(year: number, month: number, date: number);
 
@@ -109,6 +91,10 @@ export class LunarDate {
     this.lunarMonth = this._getLunarMonth(lunar.year, lunar.month);
     this.lunarDate = this._getLunarDate(lunar.julian);
     this.lunarHour = this._getLunarHour(lunar.julian);
+
+    this.holiday = this._getHoliday(lunar.month, lunar.date);
+    this.luckyHours = this._getLuckyHours(lunar.julian);
+    this.solarTerm = this._getSolarTerm(lunar.julian);
   }
 
   getYear() {
@@ -146,37 +132,63 @@ export class LunarDate {
       `Day: ${day}\n` +
       `Hour: ${hour}\n` +
       `Solar term: ${this.solarTerm}\n` +
-      `Lucky hours: ${this.luckyHours.join(', ')}\n` +
+      `Lucky hours: ${this.luckyHours}\n` +
       `${this.holiday ? this.holiday + '\n' : ''}` +
       `${this.isVegetarianDay ? 'Vegetarian Day\n': ''}`;
   }
 
   private _getLunarYear(year: number): Lunar {
-    return {
-      can: HEAVENLY_STEM[(year + 6) % 10],
-      chi: EARTHLY_BRANCH[(year + 8) % 12],
-    };
+    const can = HEAVENLY_STEM[(year + 6) % 10];
+    const chi = EARTHLY_BRANCH[(year + 8) % 12];
+    return new Lunar(can, chi);
   }
 
   private _getLunarMonth(year: number, month: number): Lunar {
-    return {
-      can: HEAVENLY_STEM[(year * 12 + month + 3) % 10],
-      chi: EARTHLY_BRANCH[(month + 1) % 12],
-    };
+    const can = HEAVENLY_STEM[(year * 12 + month + 3) % 10];
+    const chi = EARTHLY_BRANCH[(month + 1) % 12];
+    return new Lunar(can, chi);
   }
 
   private _getLunarDate(jd: number): Lunar {
-    return {
-      can: HEAVENLY_STEM[(jd + 9) % 10],
-      chi: EARTHLY_BRANCH[(jd + 1) % 12],
-    };
+    const can = HEAVENLY_STEM[(jd + 9) % 10];
+    const chi = EARTHLY_BRANCH[(jd + 1) % 12];
+    return new Lunar(can, chi);
   }
 
   private _getLunarHour(jd: number): Lunar {
-    return {
-      can: HEAVENLY_STEM[(jd - 1) * 2 % 10],
-      chi: EARTHLY_BRANCH[0]
-    };
+    const can = HEAVENLY_STEM[(jd - 1) * 2 % 10];
+    const chi = EARTHLY_BRANCH[0];
+    return new Lunar(can, chi);
+  }
+
+  private _getHoliday(month: number, date: number) {
+    return NATIONAL_HOLIDAYS.find(d =>
+      d.day === date &&
+      d.month === month
+    )?.info || null;
+  }
+
+  private _getLuckyHours(julian: number) {
+    const chi = (julian + 1) % 12;
+    const hours = LUCKY_HOURS[chi % 6];  // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+
+    const luckyHours: string[] = [];
+    for (let i = 0; i < 12; i++) {
+      if (hours.charAt(i) !== '1') {
+        continue;
+      }
+      luckyHours.push(
+        // `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`
+        `${EARTHLY_BRANCH[i]}`
+      );
+    }
+
+    return luckyHours.join(', ');
+  }
+
+  private _getSolarTerm(julian: number) {
+    const sunLong = sunLongitude(julian + 0.5 - getLocalTimezone() / 24) / Math.PI * 12;
+    return SOLAR_TERM[Math.floor(sunLong)];
   }
 
   private _checkVegetarianDay(day: number) {

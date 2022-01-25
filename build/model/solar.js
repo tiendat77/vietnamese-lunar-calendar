@@ -27,11 +27,8 @@ class SolarDate {
             this.date = date.getDate();
             this.dayInWeek = constant_1.WEEKDAY[date.getDay()];
         }
-    }
-    get holiday() {
-        var _a;
-        return ((_a = constant_1.INTERNATIONAL_HOLIDAYS.find(d => d.day === this.date &&
-            d.month === this.month)) === null || _a === void 0 ? void 0 : _a.info) || null;
+        this.holiday = this._getHoliday(this.month, this.date);
+        this.isToday = this._isToday(this.year, this.month, this.date);
     }
     toString() {
         return `${this.dayInWeek} ` +
@@ -47,6 +44,17 @@ class SolarDate {
     }
     getDate() {
         return this.date;
+    }
+    _getHoliday(month, date) {
+        var _a;
+        return ((_a = constant_1.INTERNATIONAL_HOLIDAYS.find(d => d.day === date &&
+            d.month === month)) === null || _a === void 0 ? void 0 : _a.info) || null;
+    }
+    _isToday(year, month, date) {
+        const today = new Date();
+        return today.getDate() === date &&
+            today.getMonth() === (month - 1) &&
+            today.getFullYear() === year;
     }
 }
 exports.SolarDate = SolarDate;

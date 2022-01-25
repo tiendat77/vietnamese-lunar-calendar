@@ -1,6 +1,8 @@
-export interface Lunar {
+export declare class Lunar {
     can: string;
     chi: string;
+    constructor(can: string, chi: string);
+    toString(): string;
 }
 export declare class LunarDate {
     year: number;
@@ -12,10 +14,10 @@ export declare class LunarDate {
     lunarYear: Lunar;
     isLeap: boolean;
     isVegetarianDay: boolean;
+    holiday: string | null;
+    luckyHours: string | null;
+    solarTerm: string | null;
     private julian;
-    get holiday(): string | null;
-    get luckyHours(): string[];
-    get solarTerm(): string;
     constructor(year: number, month: number, date: number);
     constructor(date: Date);
     constructor();
@@ -30,5 +32,8 @@ export declare class LunarDate {
     private _getLunarMonth;
     private _getLunarDate;
     private _getLunarHour;
+    private _getHoliday;
+    private _getLuckyHours;
+    private _getSolarTerm;
     private _checkVegetarianDay;
 }

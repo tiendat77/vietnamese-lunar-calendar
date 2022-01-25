@@ -3,7 +3,8 @@ export declare class SolarDate {
     year: number;
     month: number;
     date: number;
-    get holiday(): string | null;
+    holiday: string | null;
+    isToday: boolean;
     constructor(year: number, month: number, date: number);
     constructor(date: Date);
     constructor();
@@ -11,4 +12,6 @@ export declare class SolarDate {
     getYear(): number;
     getMonth(): number;
     getDate(): number;
+    private _getHoliday;
+    private _isToday;
 }

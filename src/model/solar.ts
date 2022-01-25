@@ -10,12 +10,8 @@ export class SolarDate {
   month: number;
   date: number;
 
-  get holiday(): string | null {
-    return INTERNATIONAL_HOLIDAYS.find(d =>
-      d.day === this.date &&
-      d.month === this.month
-    )?.info || null;
-  }
+  holiday: string | null;
+  isToday: boolean;
 
   constructor(year: number, month: number, date: number);
 
@@ -48,6 +44,9 @@ export class SolarDate {
       this.date = date.getDate();
       this.dayInWeek = WEEKDAY[date.getDay()];
     }
+
+    this.holiday = this._getHoliday(this.month, this.date);
+    this.isToday = this._isToday(this.year, this.month, this.date);
   }
 
   toString() {
@@ -67,6 +66,20 @@ export class SolarDate {
 
   getDate() {
     return this.date;
+  }
+
+  private _getHoliday(month: number, date: number) {
+    return INTERNATIONAL_HOLIDAYS.find(d =>
+      d.day === date &&
+      d.month === month
+    )?.info || null;
+  }
+
+  private _isToday(year: number, month: number, date: number) {
+    const today = new Date();
+    return today.getDate() === date &&
+           today.getMonth() === (month - 1) &&
+           today.getFullYear() === year;
   }
 
 }
