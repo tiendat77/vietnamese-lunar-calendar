@@ -5,11 +5,12 @@ import {
 
 export class SolarDate {
 
-  dayInWeek: string;
   year: number;
   month: number;
   date: number;
+  dayInWeek: number;
 
+  weekDay: string;
   holiday: string | null;
   isToday: boolean;
 
@@ -26,7 +27,7 @@ export class SolarDate {
       this.year = args[0];
       this.month = args[1];
       this.date = args[2];
-      this.dayInWeek = WEEKDAY[new Date(args[0], args[1] - 1, args[2]).getDay()];
+      this.dayInWeek = new Date(args[0], args[1] - 1, args[2]).getDay();
 
     } else if (args.length === 1) {
       // js Date constructor
@@ -34,7 +35,7 @@ export class SolarDate {
       this.year = date.getFullYear();
       this.month = date.getMonth() + 1;
       this.date = date.getDate();
-      this.dayInWeek = WEEKDAY[date.getDay()];
+      this.dayInWeek = date.getDay();
 
     } else {
       // empty constructor
@@ -42,9 +43,10 @@ export class SolarDate {
       this.year = date.getFullYear();
       this.month = date.getMonth() + 1;
       this.date = date.getDate();
-      this.dayInWeek = WEEKDAY[date.getDay()];
+      this.dayInWeek = date.getDay();
     }
 
+    this.weekDay = WEEKDAY[this.dayInWeek];
     this.holiday = this._getHoliday(this.month, this.date);
     this.isToday = this._isToday(this.year, this.month, this.date);
   }

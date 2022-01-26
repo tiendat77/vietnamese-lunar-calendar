@@ -1,8 +1,9 @@
 export declare class SolarDate {
-    dayInWeek: string;
     year: number;
     month: number;
     date: number;
+    dayInWeek: number;
+    weekDay: string;
     holiday: string | null;
     isToday: boolean;
     constructor(year: number, month: number, date: number);

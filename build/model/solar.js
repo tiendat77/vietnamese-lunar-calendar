@@ -9,7 +9,7 @@ class SolarDate {
             this.year = args[0];
             this.month = args[1];
             this.date = args[2];
-            this.dayInWeek = constant_1.WEEKDAY[new Date(args[0], args[1] - 1, args[2]).getDay()];
+            this.dayInWeek = new Date(args[0], args[1] - 1, args[2]).getDay();
         }
         else if (args.length === 1) {
             // js Date constructor
@@ -17,7 +17,7 @@ class SolarDate {
             this.year = date.getFullYear();
             this.month = date.getMonth() + 1;
             this.date = date.getDate();
-            this.dayInWeek = constant_1.WEEKDAY[date.getDay()];
+            this.dayInWeek = date.getDay();
         }
         else {
             // empty constructor
@@ -25,8 +25,9 @@ class SolarDate {
             this.year = date.getFullYear();
             this.month = date.getMonth() + 1;
             this.date = date.getDate();
-            this.dayInWeek = constant_1.WEEKDAY[date.getDay()];
+            this.dayInWeek = date.getDay();
         }
+        this.weekDay = constant_1.WEEKDAY[this.dayInWeek];
         this.holiday = this._getHoliday(this.month, this.date);
         this.isToday = this._isToday(this.year, this.month, this.date);
     }
