@@ -17,8 +17,8 @@ export class Calendar {
 
     const date: Date = new Date(year, month - 1, 1);
 
-    // week start from Sunday
-    while (date.getDay() !== 0) {
+    // week start from Monday
+    while (date.getDay() !== 1) {
       date.setDate(date.getDate() - 1);
       daysInMonth++;
     }

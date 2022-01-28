@@ -178,8 +178,8 @@ export class LunarDate {
         continue;
       }
       luckyHours.push(
-        // `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`
-        `${EARTHLY_BRANCH[i]}`
+        `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24}-${(i * 2 + 1) % 24})`
+        // `${EARTHLY_BRANCH[i]}`
       );
     }
 

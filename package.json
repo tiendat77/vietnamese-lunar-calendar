@@ -1,6 +1,6 @@
 {
   "name": "vietnamese-lunar-calendar",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "vietnamese lunar calendar converter",
   "main": "build/index.js",
   "types": "build/index.d.ts",

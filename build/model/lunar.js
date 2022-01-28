@@ -118,9 +118,9 @@ class LunarDate {
             if (hours.charAt(i) !== '1') {
                 continue;
             }
-            luckyHours.push(
-            // `${EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24} - ${(i * 2 + 1) % 24})`
-            `${constant_1.EARTHLY_BRANCH[i]}`);
+            luckyHours.push(`${constant_1.EARTHLY_BRANCH[i]} (${(i * 2 + 23) % 24}-${(i * 2 + 1) % 24})`
+            // `${EARTHLY_BRANCH[i]}`
+            );
         }
         return luckyHours.join(', ');
     }
